@@ -1,5 +1,5 @@
 
-import { Prefecture, Official, Faction, TroopType, GameEvent } from './types.ts';
+import { Prefecture, Official, Faction, GameEvent } from './types.ts';
 
 const generateTaxes = (base: number) => ({
   land: Math.floor(base * 0.7),
@@ -13,32 +13,51 @@ export const NAN_ZHILI_PREFECTURES_NAMES: string[] = [
   '应天府', '苏州府', '松江府', '扬州府', '常州府', 
   '镇江府', '淮安府', '凤阳府', '徽州府', '安庆府', 
   '太平府', '池州府', '庐州府', '宁国府', '徐州', 
-  '广德州', '和州', '滁州'
+  '广德州', '和州', '滁州', '杭州府', '湖州府', 
+  '嘉兴府', '绍兴府', '宁波府', '金华府', '衢州府'
 ];
 
 export const INITIAL_PREFECTURES: Prefecture[] = NAN_ZHILI_PREFECTURES_NAMES.map((name, i) => ({
   id: `pref-${i}`,
   name,
-  taxes: name === '苏州府' ? { land: 70, salt: 8, merchant: 15, maritime: 3, misc: 4 } : generateTaxes(70 + Math.floor(Math.random() * 30))
+  taxes: name === '苏州府' ? { land: 70, salt: 8, merchant: 15, maritime: 3, misc: 4 } : generateTaxes(40 + Math.floor(Math.random() * 40))
 }));
 
-export const COURT_OFFICIALS: Official[] = [
-  { role: '首辅', name: '马士英', description: '掌控凤阳军权，拥立之功。' },
+// Separate the Senior Grand Secretary from the ministries for the tree view
+export const SENIOR_GRAND_SECRETARY: Official = { role: '内阁首辅', name: '马士英', description: '掌控凤阳军权，拥立之功。' };
+
+export const SIX_MINISTRIES: Official[] = [
   { role: '吏部尚书', name: '张慎言', description: '老成持重，东林党领袖。' },
   { role: '户部尚书', name: '高弘图', description: '廉洁耿直，理财能臣。' },
   { role: '礼部尚书', name: '钱谦益', description: '江左三大家之首，士林领袖。' },
-  { role: '兵部尚书', name: '史可法', description: '赤心报国，驻守扬州。' },
+  { role: '兵部尚书', name: '史可法', description: '赤心报国，督师扬州。' },
   { role: '刑部尚书', name: '解学龙', description: '执法严明，清流名臣。' },
   { role: '工部尚书', name: '何应瑞', description: '格物致知，负责修缮与火器。' },
 ];
 
+export const COURT_OFFICIALS: Official[] = [SENIOR_GRAND_SECRETARY, ...SIX_MINISTRIES];
+
+// Data for Diplomacy Tree
+// Updated statuses to '和平' as requested
+export const MING_WARLORDS = [
+  { name: '高杰', title: '兴平伯', loc: '泗州', troops: '3万', status: '和平' },
+  { name: '黄得功', title: '靖南侯', loc: '庐州', troops: '4万', status: '和平' },
+  { name: '刘良佐', title: '广昌伯', loc: '临淮', troops: '2.5万', status: '和平' },
+  { name: '刘泽清', title: '东平伯', loc: '淮安', troops: '3万', status: '和平' },
+  { name: '左良玉', title: '宁南侯', loc: '武昌', troops: '20万', status: '和平' },
+];
+
+export const QING_GENERALS = [
+  { name: '多铎', title: '豫亲王', desc: '定国大将军', status: '敌对' },
+  { name: '豪格', title: '肃亲王', desc: '入川作战', status: '敌对' },
+  { name: '阿济格', title: '英亲王', desc: '追击顺军', status: '敌对' },
+  { name: '博洛', title: '贝勒', desc: '分兵南下', status: '敌对' },
+];
+
+// Kept for backward compatibility if needed, but UI uses specific lists now
 export const FACTIONS: Faction[] = [
   { name: '清势力', status: '敌对', description: '满清八旗及吴三桂投诚军。' },
-  { name: '高杰', status: '和平', description: '江北四镇之一，驻泗州。' },
-  { name: '黄得功', status: '和平', description: '江北四镇之一，驻庐州。' },
-  { name: '刘良佐', status: '和平', description: '江北四镇之一，驻临淮。' },
-  { name: '刘泽清', status: '和平', description: '江北四镇之一，驻淮安。' },
-  { name: '左良玉', status: '和平', description: '宁南侯，拥兵武昌。' },
+  ...MING_WARLORDS.map(w => ({ name: w.name, status: '和平' as const, description: `${w.title}，驻${w.loc}。` }))
 ];
 
 export const GAME_EVENTS: GameEvent[] = [
