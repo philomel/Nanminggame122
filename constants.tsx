@@ -1,5 +1,5 @@
 
-import { Prefecture, Official, Faction, TroopType, GameEvent } from './types';
+import { Prefecture, Official, Faction, TroopType, GameEvent } from './types.ts';
 
 const generateTaxes = (base: number) => ({
   land: Math.floor(base * 0.7),

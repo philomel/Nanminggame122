@@ -5,7 +5,7 @@ import {
   COURT_OFFICIALS, 
   FACTIONS,
   GAME_EVENTS
-} from './constants';
+} from './constants.tsx';
 import { 
   GameState, 
   TroopType, 
@@ -14,7 +14,7 @@ import {
   TaxDetails,
   GameEvent,
   EventOption
-} from './types';
+} from './types.ts';
 import { 
   Shield, 
   FlaskConical, 
